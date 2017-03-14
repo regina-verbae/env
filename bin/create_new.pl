@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-use v5.16;
+use v5.10;
 use warnings;
 
 use Getopt::Long;
@@ -31,7 +31,6 @@ usage("Must provide -o output file for scripts and tests")
 my %ATTR;
 $ATTR{$opts->{type}}++;
 $ATTR{script}++ if $ATTR{test};
-$ATTR{package}++ if $ATTR{object};
 
 my $output = $ATTR{script} ? "#!/usr/bin/env perl\n" : "";
 $output .= << "THEEND";
@@ -51,10 +50,11 @@ $output .= << "THEEND";
 
 THEEND
 
-$output .= $ATTR{package} ? "package $opts->{package};\n\n" : "";
+$output .= ($ATTR{package} or $ATTR{object}) ? "package $opts->{package};\n\n" : "";
 
 $output .= << "THEEND";
-use v5.16;
+use v5.10;
+use strict;
 use warnings;
 
 THEEND
@@ -79,6 +79,8 @@ THEEND
 : "";
 
 $output .= $ATTR{object} ? << "THEEND"
+use Moo;
+
 #####################################################################
 
 =head1 CONSTRUCTOR
@@ -109,6 +111,10 @@ $output .= $ATTR{package} ? << "THEEND"
 
 #####################################################################
 
+THEEND
+: '';
+
+$output .= ($ATTR{package} or $ATTR{object}) ? << "THEEND"
 1;
 
 __END__
@@ -131,8 +137,6 @@ use Test::Most;
 my \$APP = "$opts->{package}";
 
 use $opts->{package};
-
-die_on_fail;
 
 my \$TEST_DIR = path(\$0)->sibling('$short_package_name');
 
