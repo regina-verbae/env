@@ -1,3 +1,18 @@
+set nocompatible
+filetype off
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" Rust support
+Plugin 'rust-lang/rust.vim'
+
+call vundle#end()
+
+"" Enable all syntax highlighting and indentation plugins
+syntax on
+filetype plugin indent on
+
 set autoindent
 set smartindent
 set shiftwidth=4
@@ -21,10 +36,6 @@ imap <F8> <esc>:bp <CR>i
 
 colorscheme mary
 
-"" Enable all syntax highlighting and indentation plugins
-syntax on
-filetype indent plugin on
-
 autocmd BufNewFile,BufRead *.t set filetype=test
 autocmd BufNewFile,BufRead *.t source $VIMRUNTIME/syntax/perl.vim
 autocmd BufNewFile,BufRead *.tdy set filetype=perl
@@ -33,6 +44,7 @@ autocmd BufNewFile,BufRead *.tdy source $VIMRUNTIME/syntax/perl.vim
 "" Set up block commenting in vim
 autocmd FileType * let b:comment = "#"
 autocmd FileType vim let b:comment = "\""
+autocmd FileType rust let b:comment = '\/\/'
 nmap <expr> - AddComment()
 nmap <expr> _ RemoveComment()
 vmap <expr> - AddComment()
@@ -53,9 +65,9 @@ func RestorePatternMatch()
 endfunc
 
 func InsertComment()
-    return ':s/^\(\s*\)/\1'.b:comment."\r"
+    return ':s/^\(\s*\)/\1'.b:comment." /\r"
 endfunc
 
 func ScrapeComment()
-    return ':s/^\(\s*\)'.b:comment."/\\1/\r"
+    return ':s/^\(\s*\)'.b:comment."\\s\\?/\\1/\r"
 endfunc
