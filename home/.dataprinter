@@ -1,0 +1,12 @@
+{
+	output => 'stdout',
+	hash_separator => ' => ',
+	print_escapes => 1,
+	end_separator => 1,
+	class => {
+		parents => 0,
+		linear_isa => 0,
+		expand => 'all',
+		show_methods => 'none',
+	},
+};
