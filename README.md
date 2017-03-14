@@ -23,6 +23,14 @@ ln -sf ~/github/env/home/.vim/colors/mary.vim ~/.vim/colors/mary.vim
 ln -sf github/env/home/.vimrc ~/.vimrc
 ```
 
+## bash
+
+1. Install .profile
+
+```shell
+ln -sf github/env/home/.profile ~/.profile
+```
+
 ## git
 
 1. Install config
@@ -33,13 +41,68 @@ ln -sf github/env/home/.gitconfig ~/.gitconfig
 
 ## perl
 
+1. Install plenv
 
+```shell
+git clone https://github.com/tokuhirom/plenv.git ~/.plenv
+```
 
-## bash
+2. Restart shell for .profile effects
 
+```shell
+exec $SHELL -l
+```
 
+3. Install perl-build
+
+```shell
+git clone https://github.com/tokuhirom/Perl-Build.git ~/.plenv/plugins/perl-build/
+```
+
+4. Install desired perl
+
+```shell
+plenv install $version
+```
+
+5. Rebuild shims
+
+```shell
+plenv rehash
+```
+
+6. Install cpanm
+
+```shell
+plenv install-cpanm
+plenv rehash
+```
 
 ## Dist::Zilla
 
+1. Install default minter
 
+```shell
+mkdir -p ~/.dzil/profiles
+ln -sf ../../github/env/home/.dzil/profiles/default ~/.dzil/profiles/default
+```
 
+2. Write config file
+
+```shell
+vim ~/.dzil/config.ini
+```
+
+```ini
+[%User]
+name = Mary Ehlers
+email = <email>
+
+[%Rights]
+license_class = Apache_2_0
+copyright_holder = Mary Ehlers
+
+[%PAUSE]
+username = EHLERS
+password =
+```
