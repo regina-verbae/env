@@ -22,7 +22,6 @@ set ruler
 set expandtab
 set linebreak
 set number
-set paste
 set laststatus=2
 set hlsearch
 
