@@ -6,7 +6,7 @@ if [ -n "$BASH_VERSION" ]; then
     fi
 fi
 
-alias gitssh=`perl -E 'chomp(my $remote = \`git remote\`); chomp(my $git = \`git config --get remote.$remote.url\`); $git = "git\@github.com:" . join("/", (split("/", $git))[-2..-1]); say "git remote set-url $remote $git";'`
+# alias gitssh=`perl -E 'chomp(my $remote = \`git remote\`); chomp(my $git = \`git config --get remote.$remote.url\`); $git = "git\@github.com:" . join("/", (split("/", $git))[-2..-1]); say "git remote set-url $remote $git";'`
 
 alias ls='ls --color=auto'
 
@@ -17,3 +17,5 @@ PATH="$HOME/.plenv/bin:$HOME/bin:$PATH"
 
 # Initialize plenv
 eval "$(plenv init -)"
+
+export PATH="$HOME/.cargo/bin:$PATH"
