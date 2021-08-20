@@ -9,10 +9,12 @@ use warnings;
 
 use Getopt::Long;
 use Path::Tiny;
+use Syntax::Keyword::Try;
 
 my $opts = {};
 GetOptions($opts,
     'path|p',
+    'share|s',
     'editor|e=s',
     'help|h',
     'version|v',
@@ -26,23 +28,46 @@ $opts->{editor} //= $ENV{EDITOR} // "gvim";
 
 #####################################################################
 
+my $mod_path = ($module =~ s{::}{/}gr) . '.pm';
+
+eval "require $module";
+
+my $error = $@;
+
+my $path = $INC{$mod_path} // $INC{$mod_path.'c'};
+
+die "Perl could not load the given module: $error" if !$path and $error;
+
+die "Perl cannot find the given module\n" unless $path;
+
 if ($opts->{version}) {
-    my $cmd = "perl -M$module -e 'print \$$module\::VERSION;'";
-    chomp(my $version = `$cmd`);
-    $version ||= '<unknown>';
-    say "VERSION for $module: $version";
-    exit unless $opts->{path};
+    my $version = eval "\$$module\::VERSION";
+    say "VERSION of $module: " . ($version ? $version : '<unknown>');
 }
 
-my $cmd = "perldoc -l -m $module";
-chomp(my $perldoc = `$cmd`);
-chomp($perldoc);
+die "Path $path does not exist" unless -e $path;
 
-my $path = path($perldoc);
+say $path if $opts->{path};
 
-say $perldoc and exit 1 if !$path->exists;
+if ($opts->{share}) {
+    require File::ShareDir;
+    my $dist = $module =~ s{::}{-}gr;
+    try {
+        my $mod_dir = File::ShareDir::module_dir($module);
+        say for "File::ShareDir::module_dir('$module'):", $mod_dir;
+    }
+    catch {
+        try {
+            my $dist_dir = File::ShareDir::dist_dir($dist);
+            say fr "File::ShareDir::dist_dir('$dist'):", $dist_dir;
+        }
+        catch {
+            warn "Both File::ShareDir's module_dir($module) and dist_dir($dist) failed\n";
+        }
+    }
+}
 
-say $path and exit if $opts->{path};
+exit if $opts->{path} or $opts->{version} or $opts->{share};
 
 exec "$opts->{editor} $path";
 
@@ -59,15 +84,17 @@ sub usage {
 
     my $usage = "Usage: ".path($0)->basename." [options] <module>\n";
     $usage .= << "USAGEEND";
-  Attempts to locate the path for the given module and
-    opens the file
+  Attempts to locate and open the given Perl module
+    or prints information about it
 Options:
-  [-path|p]             Print the path to the module*
-  [-version|v]          Print the version of the module*
-      Note: If either --path or --version requested,
-        the file will not be opened
-  [-editor|e <editor>]  Editor used for editing
-    Default is \$ENV{EDITOR} // gvim
+  --path|p             Print the path to the module*
+  --version|v          Print the version of the module*
+  --share|s            Print the File::ShareDir path for the module*
+  --editor|e=<editor>  Editor used for editing
+      Default is \$ENV{EDITOR} // gvim
+  --help|h
+    
+    * Module will not be opened for editing
 USAGEEND
 
     say $OUT $usage;
