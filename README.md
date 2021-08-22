@@ -14,13 +14,14 @@ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
 ```shell
 mkdir ~/.vim/colors
-ln -sf ~/github/env/home/.vim/colors/mary.vim ~/.vim/colors/mary.vim
+ln -nsf ~/github/env/home/.vim/colors/mary.vim ~/.vim/colors/mary.vim
 ```
 
 3. Install vimrc
 
 ```shell
-ln -sf github/env/home/.vimrc ~/.vimrc
+ln -nsf github/env/home/.vimrc ~/.vimrc
+ln -nsf github/env/home/.gvimrc ~/.gvimrc
 ```
 
 ## bash
@@ -28,7 +29,7 @@ ln -sf github/env/home/.vimrc ~/.vimrc
 1. Install .profile
 
 ```shell
-ln -sf github/env/home/.profile ~/.profile
+ln -nsf github/env/home/.profile ~/.profile
 ```
 
 ## git
@@ -36,7 +37,7 @@ ln -sf github/env/home/.profile ~/.profile
 1. Install config
 
 ```shell
-ln -sf github/env/home/.gitconfig ~/.gitconfig
+ln -nsf github/env/home/.gitconfig ~/.gitconfig
 ```
 
 ## perl
@@ -84,7 +85,7 @@ plenv rehash
 
 ```shell
 mkdir -p ~/.dzil/profiles
-ln -sf ../../github/env/home/.dzil/profiles/default ~/.dzil/profiles/default
+ln -nsf ../../github/env/home/.dzil/profiles/default ~/.dzil/profiles/default
 ```
 
 2. Write config file
