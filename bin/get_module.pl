@@ -59,7 +59,7 @@ if ($opts->{share}) {
     catch {
         try {
             my $dist_dir = File::ShareDir::dist_dir($dist);
-            say fr "File::ShareDir::dist_dir('$dist'):", $dist_dir;
+            say for "File::ShareDir::dist_dir('$dist'):", $dist_dir;
         }
         catch {
             warn "Both File::ShareDir's module_dir($module) and dist_dir($dist) failed\n";
