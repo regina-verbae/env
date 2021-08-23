@@ -172,7 +172,24 @@ GetOptions(\$opts,
 #####################################################################
 
 sub usage {
+    my \$message = shift;
 
+    my \$OUT = defined \$message ? \\*STDERR : \\*STDOUT;
+
+    say \$OUT "\\n\$message\\n" if \$message;
+
+    my \$usage = 'Usage: '.path(\$0)->basename."[options] <arg>\\n";
+    \$usage .= <<"USAGEEND";
+  
+Options:
+  --thing=<thing>
+      Default: 
+  --version
+  --help|h
+USAGEEND
+
+    say \$OUT \$usage;
+    exit;
 }
 THEEND
 : "";
@@ -196,16 +213,18 @@ sub usage {
 
     say $OUT "\n$message\n" if $message;
 
-    my $usage = "Usage: ".path($0)->basename."\n";
+    my $usage = "Usage: ".path($0)->basename." [options]\n";
     $usage .= <<"USAGEEND";
-  [-t type]
-  [-p package]
-  [-o outfile]
-Outputs template for new type = script/package/object/test
-  Default type is script
-  Package name is required for new packages, objects, or tests
-  Output files is required for new scripts and tests for chmod
-  If outfile is provided, will also open the file for editing
+  Create new perl script, package, object, or test quickly
+Options:
+  --type|t=<type>        Type to create
+      Available: script, package, object, or test
+      Default: script
+  --package|p=<package>  Package name
+      * required for all types except script
+  --outfile|o=<outfile>  Path to output file
+      * required for scripts and tests for chmod
+      When provided, opens the file for editing.
 USAGEEND
 
     print $OUT $usage;
