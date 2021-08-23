@@ -1,12 +1,9 @@
-{
-	output => 'stdout',
-	hash_separator => ' => ',
-	print_escapes => 1,
-	end_separator => 1,
-	class => {
-		parents => 0,
-		linear_isa => 0,
-		expand => 'all',
-		show_methods => 'none',
-	},
-};
+class.expand = all
+class.linear_isa = 0
+class.parents = 0
+class.show_methods = none
+end_separator = 1
+hash_separator = ' => '
+output = stdout
+print_escapes = 1
+
